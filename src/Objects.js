@@ -160,8 +160,8 @@ class Objects {
 	 * @async
 	 * @return {Promise<Object>}
 	 */
-	save(file, path) {
-		return this.saveFile(file, path);
+	save(file, path, custom_headers) {
+		return this.saveFile(file, path, custom_headers);
 	}
 	
 	/**
@@ -234,7 +234,7 @@ class Objects {
 	 * @async
 	 * @return {Promise<Object>}
 	 */
-	saveFile(file, path) {
+	saveFile(file, path, custom_headers) {
 		return new Promise(async (resolve, reject) => {
 			try {
 				// check
@@ -270,13 +270,12 @@ class Objects {
 					throw new Error("Container does not seem to exist.");
 
 				let stream = fs.createReadStream(file);
+				const headers = {"X-Auth-Token": this.context.token,"Accept": "application/json"}
+				console.log( {...headers, ...custom_headers })
 				stream.pipe(request({
 					method: 'PUT',
 					uri: encodeURI(this.context.endpoint.url + path),
-					headers: {
-						"X-Auth-Token": this.context.token,
-						"Accept": "application/json"
-					}
+					headers: {...headers, ...custom_headers }
 				}, (err, res, body) => {
 					err = err || request.checkIfResponseIsError(res);
 					if (err) // noinspection ExceptionCaughtLocallyJS
