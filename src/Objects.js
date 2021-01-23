@@ -2,7 +2,7 @@ const fs = require('fs');
 const _ = require("../tools/lodash");
 const request = require('../tools/request');
 const moment = require('moment');
-const Blob = require("cross-blob");
+const md5 = require('cross-blob');
 
 const ObjectsMeta = require('./ObjectsMeta');
 
