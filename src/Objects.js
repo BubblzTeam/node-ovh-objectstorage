@@ -8,7 +8,7 @@ const ObjectsMeta = require('./ObjectsMeta');
 /**
  * Put, edit, remove, downloads objects files
  *
- * __Available methods :__ *download(), *get(), *save(), *save_with_result(), *set()*, *set_with_result()*, *copy()*, *copy_with_result()*, *delete()*, *delete_with_result()*, *deletes()*, *deletes_with_result()*, *exist()*, *info()*, *expire_at()*, *expire_at_with_result()*, *expire_after()*, *expire_after_with_result()*, *metas()*
+ * __Available methods :__ *download(), *get(), *manifest(), *save(), *save_with_result(), *set()*, *set_with_result()*, *copy()*, *copy_with_result()*, *delete()*, *delete_with_result()*, *deletes()*, *deletes_with_result()*, *exist()*, *info()*, *expire_at()*, *expire_at_with_result()*, *expire_after()*, *expire_after_with_result()*, *metas()*
  */
 class Objects {
 	/**
@@ -69,6 +69,67 @@ class Objects {
 					headers: {
 						"X-Auth-Token": this.context.token,
 						"Accept": "application/json"
+					}
+				}, (err, res, body) => {
+					err = err || request.checkIfResponseIsError(res);
+					if (err) // noinspection ExceptionCaughtLocallyJS
+						throw new Error(err);
+				}).pipe(writeStream);
+				writeStream.on('error', (e) => {
+					throw e;
+				});
+				writeStream.on('finish', () => {
+					return resolve(true);
+				});
+			} catch (e) {
+				if (fs.existsSync(pathLocal))
+					fs.unlink(pathLocal);
+
+				return reject(e);
+			}
+		});
+	}
+	/**
+	 * Create Manifest File (For Big upload) => https://docs.openstack.org/swift/latest/overview_large_objects.html
+	 *
+	 * @param {String} path Online path of file with container
+	 *
+	 * @async
+	 * @return {Promise<Boolean|Error>}
+	 */
+	manifest(path) {
+		return new Promise(async (resolve, reject) => {
+			try {
+				// check
+				if (_.isUndefined(path)) // noinspection ExceptionCaughtLocallyJS
+					throw new Error("Path parameter is expected.");
+				if (!_.isString(path)) // noinspection ExceptionCaughtLocallyJS
+					throw new Error("Path parameter is not a string.");
+				if (!_.includes(path, '/')) // noinspection ExceptionCaughtLocallyJS
+					throw new Error("Path parameter isn't valid : container/filename.ext.");
+
+				// check if file exist
+				if (!(await this.context.objects().exist(path))) // noinspection ExceptionCaughtLocallyJS
+					throw new Error("File path does not seem to exist.");
+
+				let file = (() => {
+					let p = path.split('/');
+					if (p[0] === "")
+						delete p[0];
+
+					p = _.filter(p, (r) => {
+						return !_.isUndefined(r);
+					});
+
+					return p.join("/");
+				})();
+				request({
+					method: 'PUT',
+					uri: encodeURI(this.context.endpoint.url + "/" + file),
+					headers: {
+						"X-Auth-Token": this.context.token,
+						"Accept": "application/json",
+						"X-Object-Manifest:": file + "/"
 					}
 				}, (err, res, body) => {
 					err = err || request.checkIfResponseIsError(res);
