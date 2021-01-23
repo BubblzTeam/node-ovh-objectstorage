@@ -135,6 +135,10 @@ class Objects {
 					},
 					body: new Blob('', {type: 'application/octet-binary'}),
 				}, (err, res, body) => {
+					console.log("err")
+					console.log(err)
+					console.log("res")
+					console.log(res)
 					err = err || request.checkIfResponseIsError(res);
 					if (err) // noinspection ExceptionCaughtLocallyJS
 						throw new Error(err);
