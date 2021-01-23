@@ -271,7 +271,6 @@ class Objects {
 
 				let stream = fs.createReadStream(file);
 				const headers = {"X-Auth-Token": this.context.token,"Accept": "application/json"}
-				console.log( {...headers, ...custom_headers })
 				stream.pipe(request({
 					method: 'PUT',
 					uri: encodeURI(this.context.endpoint.url + path),
