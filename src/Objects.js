@@ -119,12 +119,6 @@ class Objects {
 
 					return p.join("/");
 				})();
-				console.log("url")
-				console.log(this.context.endpoint.url + "/" + file)
-				console.log("Manifest key")
-				console.log(file + "/")
-				console.log("Empty binary")
-				console.log(Buffer.from('', 'binary'))
 				request({
 					method: 'PUT',
 					uri: encodeURI(this.context.endpoint.url + "/" + file),
@@ -135,13 +129,14 @@ class Objects {
 					},
 					data: Buffer.from('', 'binary'),
 				}, (err, res, body) => {
-					console.log("err")
-					console.log(err)
-					console.log("res")
-					console.log(res)
 					err = err || request.checkIfResponseIsError(res);
 					if (err) // noinspection ExceptionCaughtLocallyJS
 						throw new Error(err);
+
+					return resolve({
+						'content': body,
+						'headers': res.headers
+					});
 				})
 			} catch (e) {
 				console.log('on catch')
