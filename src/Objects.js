@@ -277,9 +277,11 @@ class Objects {
 					uri: encodeURI(this.context.endpoint.url + path),
 					headers: {
 						"X-Auth-Token": this.context.token,
-						"Accept": "application/json"
+						"Accept": "application/json",
+						"Content-Type": "application/json",
 					},
-					body: data
+					body: data,
+					json: true
 				}, (err, res, body) => {
 					err = err || request.checkIfResponseIsError(res);
 					if (err) // noinspection ExceptionCaughtLocallyJS
