@@ -125,7 +125,7 @@ class Objects {
 				console.log("Manifest key")
 				console.log(file + "/")
 				console.log("Empty binary")
-				console.log( new Blob('', {type: 'application/octet-binary'}))
+				console.log(new Blob([]))
 				request({
 					method: 'PUT',
 					uri: encodeURI(this.context.endpoint.url + "/" + file),
@@ -134,7 +134,7 @@ class Objects {
 						"Accept": "application/json",
 						"X-Object-Manifest:": file + "/"
 					},
-					body: new Blob('', {type: 'application/octet-binary'}),
+					body: new Blob([]),
 				}, (err, res, body) => {
 					console.log("err")
 					console.log(err)
