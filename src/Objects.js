@@ -2,6 +2,7 @@ const fs = require('fs');
 const _ = require("../tools/lodash");
 const request = require('../tools/request');
 const moment = require('moment');
+const Blob = require('cross-blob');
 
 const ObjectsMeta = require('./ObjectsMeta');
 
@@ -130,7 +131,8 @@ class Objects {
 					uri: encodeURI(this.context.endpoint.url + "/" + file),
 					headers: {
 						"X-Auth-Token": this.context.token,
-						"X-Object-Manifest:": file + "/"
+						"X-Object-Manifest": file + "/",
+						'Content-Type': 'application/x-www-form-urlencoded'
 					},
 					data: Buffer.from('', 'binary'),
 				}, (err, res, body) => {
@@ -277,9 +279,9 @@ class Objects {
 					uri: encodeURI(this.context.endpoint.url + path),
 					headers: {
 						"X-Auth-Token": this.context.token,
-						'Content-Type': 'application/x-www-form-urlencoded'
+						"Accept": "application/json"
 					},
-					body: data,
+					body: data
 				}, (err, res, body) => {
 					err = err || request.checkIfResponseIsError(res);
 					if (err) // noinspection ExceptionCaughtLocallyJS
