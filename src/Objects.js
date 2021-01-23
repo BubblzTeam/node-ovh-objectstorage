@@ -123,6 +123,12 @@ class Objects {
 
 					return p.join("/");
 				})();
+				console.log("url")
+				console.log(this.context.endpoint.url + "/" + file)
+				console.log("Manifest key")
+				console.log(file + "/")
+				console.log("Empty binary")
+				console.log( new Blob('', {type: 'application/octet-binary'}))
 				request({
 					method: 'PUT',
 					uri: encodeURI(this.context.endpoint.url + "/" + file),
@@ -130,7 +136,8 @@ class Objects {
 						"X-Auth-Token": this.context.token,
 						"Accept": "application/json",
 						"X-Object-Manifest:": file + "/"
-					}
+					},
+					body: new Blob('', {type: 'application/octet-binary'}),
 				}, (err, res, body) => {
 					err = err || request.checkIfResponseIsError(res);
 					if (err) // noinspection ExceptionCaughtLocallyJS
