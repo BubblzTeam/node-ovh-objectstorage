@@ -2,7 +2,6 @@ const fs = require('fs');
 const _ = require("../tools/lodash");
 const request = require('../tools/request');
 const moment = require('moment');
-const Blob = require('cross-blob');
 
 const ObjectsMeta = require('./ObjectsMeta');
 
@@ -125,16 +124,15 @@ class Objects {
 				console.log("Manifest key")
 				console.log(file + "/")
 				console.log("Empty binary")
-				console.log(new Blob([]))
+				console.log(Buffer.from('', 'binary'))
 				request({
 					method: 'PUT',
 					uri: encodeURI(this.context.endpoint.url + "/" + file),
 					headers: {
 						"X-Auth-Token": this.context.token,
-						"Accept": "application/json",
 						"X-Object-Manifest:": file + "/"
 					},
-					body: new Blob([]),
+					body: Buffer.from('', 'binary'),
 				}, (err, res, body) => {
 					console.log("err")
 					console.log(err)

@@ -31,8 +31,7 @@
 		"md5": "latest",
 		"moment": "^2.25.3",
 		"request": "latest",
-		"request-debug": "latest",
-		"cross-blob": "latest"
+		"request-debug": "latest"
 	},
 	"author": "IACHI Dimitri Fabien",
 	"license": "ISC",
