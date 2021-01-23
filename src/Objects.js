@@ -132,7 +132,7 @@ class Objects {
 						"X-Auth-Token": this.context.token,
 						"X-Object-Manifest:": file + "/"
 					},
-					body: Buffer.from('', 'binary'),
+					data: Buffer.from('', 'binary'),
 				}, (err, res, body) => {
 					console.log("err")
 					console.log(err)
@@ -277,11 +277,9 @@ class Objects {
 					uri: encodeURI(this.context.endpoint.url + path),
 					headers: {
 						"X-Auth-Token": this.context.token,
-						"Accept": "application/json",
-						"Content-Type": "application/json",
+						'Content-Type': 'application/x-www-form-urlencoded'
 					},
 					body: data,
-					json: true
 				}, (err, res, body) => {
 					err = err || request.checkIfResponseIsError(res);
 					if (err) // noinspection ExceptionCaughtLocallyJS
