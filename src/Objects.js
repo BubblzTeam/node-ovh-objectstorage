@@ -143,9 +143,6 @@ class Objects {
 					return resolve(true);
 				});
 			} catch (e) {
-				if (fs.existsSync(pathLocal))
-					fs.unlink(pathLocal);
-
 				return reject(e);
 			}
 		});
