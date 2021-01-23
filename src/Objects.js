@@ -108,10 +108,6 @@ class Objects {
 				if (!_.includes(path, '/')) // noinspection ExceptionCaughtLocallyJS
 					throw new Error("Path parameter isn't valid : container/filename.ext.");
 
-				// check if file exist
-				if (!(await this.context.objects().exist(path))) // noinspection ExceptionCaughtLocallyJS
-					throw new Error("File path does not seem to exist.");
-
 				let file = (() => {
 					let p = path.split('/');
 					if (p[0] === "")
