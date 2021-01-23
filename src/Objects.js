@@ -142,15 +142,7 @@ class Objects {
 					err = err || request.checkIfResponseIsError(res);
 					if (err) // noinspection ExceptionCaughtLocallyJS
 						throw new Error(err);
-				}).pipe(writeStream);
-				writeStream.on('error', (e) => {
-					console.log('on res')
-					console.log(e)
-					throw e;
-				});
-				writeStream.on('finish', () => {
-					return resolve(true);
-				});
+				})
 			} catch (e) {
 				console.log('on catch')
 				console.log(e)
